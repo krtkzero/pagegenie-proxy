@@ -25,11 +25,11 @@ async def gemini_proxy(request: Request):
         response = requests.post(
             "https://api.gemini.com/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer {API_KEY}",  # Use the environment variable
+                "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json"
             },
             json={
-                "model": "gemini-1",  # Replace with the correct Gemini model name if different
+                "model": "gemini-1",  # Replace with actual Gemini model name if different
                 "messages": [{"role": "user", "content": f"Write JavaScript to: {prompt}. Only return the JS code."}],
                 "temperature": 0.5
             }
@@ -38,13 +38,14 @@ async def gemini_proxy(request: Request):
         # Check if the request was successful
         response.raise_for_status()
 
-        # Return the JSON response
-        result = response.json()
-        return result
+        # Log the full response for debugging
+        print("API Response:", response.json())
+
+        # Return the JSON response directly for inspection
+        return response.json()
 
     except requests.RequestException as e:
         return {"error": f"Request error: {str(e)}"}
 
     except Exception as e:
         return {"error": f"Unexpected error: {str(e)}"}
-
